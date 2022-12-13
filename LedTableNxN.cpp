@@ -1,12 +1,12 @@
 #include <Adafruit_GFX.h>
-#include <FastLed.h>
-#include <Arduino.h>
+#include <Adafruit_NeoPixel.h>
+#include <LedTableNxN.h>
 
-LedTableNxN::LedTableNxN(ESPIChipsets CHIPSET, int data_pin, int16 n) : Adafruit_GFX(n, n)
+LedTableNxN::LedTableNxN(int data_pin, int n, neoPixelType flags) : Adafruit_GFX(n, n)
 {
-  table = new CRGB(n * n);
-  pinMode(data_pin, OUTPUT);
-  FastLED.addLeds<CHIPSET, data_pin>(table, n * n);
+  this->table = new Adafruit_NeoPixel(n * n, data_pin, flags);
+  this->table->begin();
+  this->table->show();
 }
 
 LedTableNxN::~LedTableNxN(void)
@@ -17,7 +17,7 @@ LedTableNxN::~LedTableNxN(void)
   }
 }
 
-LedTableNxN::drawPixel(void)
+void LedTableNxN::drawPixel(int16_t x, int16_t y, uint16_t color)
 {
   if (table)
   {
@@ -45,15 +45,14 @@ LedTableNxN::drawPixel(void)
     uint8_t red = color >> 11;
     uint8_t green = (color << 5) >> 10;
     uint8_t blue = (color << 11) >> 11;
-
-    CRGB newcolor = CRGB(red, green, blue);
     if (y % 2 == 1)
-      table[(11 - x) + y * WIDTH] = newcolor;
+      this->table->setPixelColor((11 - x) + y * WIDTH, red, green, blue);
     else
-      table[x + y * WIDTH] = newcolor;
-
-    LedTableNxN::show(void)
-    {
-      FastLED.show();
-    }
+      this->table->setPixelColor(x + y * WIDTH, red, green, blue);
   }
+}
+
+void LedTableNxN::show(void)
+{
+  this->table->show();
+}

@@ -1,15 +1,17 @@
 #include <Adafruit_GFX.h>
-#include <FastLed.h>
+#include <Adafruit_NeoPixel.h>
+
+typedef class LedTableNxN LedTableNxN;
 
 class LedTableNxN : public Adafruit_GFX
 {
 
 public:
-    LedTableNxN(ESPIChipsets CHIPSET, int data_pin, int16 n);
+    LedTableNxN(int n, int dataPin, neoPixelType flags);
     ~LedTableNxN(void);
     void drawPixel(int16_t x, int16_t y, uint16_t color);
-    void show();
+    void show(void);
 
 private:
-    CRGB *table;
-}
+    Adafruit_NeoPixel *table;
+};
