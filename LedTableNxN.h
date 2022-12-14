@@ -11,6 +11,7 @@ public:
     ~LedTableNxN(void);
     void drawPixel(int16_t x, int16_t y, uint16_t color);
     void show(void);
+    uint32_t getPixel(int n);
 
 private:
     Adafruit_NeoPixel *table;
