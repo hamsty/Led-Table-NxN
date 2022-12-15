@@ -1,12 +1,14 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoPixel.h>
 #include <LedTableNxN.h>
+#include <Arduino.h>
 
-LedTableNxN::LedTableNxN(int data_pin, int n, neoPixelType flags) : Adafruit_GFX(n, n)
+LedTableNxN::LedTableNxN(int n, int dataPin, neoPixelType flags) : Adafruit_GFX(n, n)
 {
-  this->table = new Adafruit_NeoPixel(n * n, data_pin, flags);
+  Serial.begin(115200);
+  this->table = new Adafruit_NeoPixel(n * n, dataPin, flags);
   this->table->begin();
-  this->table->show();
+  // this->table->show();
 }
 
 LedTableNxN::~LedTableNxN(void)
@@ -42,17 +44,24 @@ void LedTableNxN::drawPixel(int16_t x, int16_t y, uint16_t color)
       y = HEIGHT - 1 - t;
       break;
     }
-    uint8_t red = color >> 11;
-    uint8_t green = (color << 5) >> 10;
-    uint8_t blue = (color << 11) >> 11;
     if (y % 2 == 1)
-      this->table->setPixelColor((11 - x) + y * WIDTH, red, green, blue);
-    else
-      this->table->setPixelColor(x + y * WIDTH, red, green, blue);
+    {
+      x = WIDTH - x - 1;
+    }
+    uint8_t red = (color >> 11) << 3;
+    uint8_t green = ((color << 5) >> 10) << 2;
+    uint8_t blue = ((color << 11) >> 11) << 3;
+    uint16_t n = x + (WIDTH * y);
+    this->table->setPixelColor(n, red, green, blue);
   }
 }
 
 void LedTableNxN::show(void)
 {
   this->table->show();
+}
+
+uint32_t LedTableNxN::getPixel(int n)
+{
+  return this->table->getPixelColor(n);
 }
