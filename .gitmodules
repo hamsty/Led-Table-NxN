@@ -1,0 +1,3 @@
+[submodule "Image2Bin"]
+	path = Image2Bin
+	url = https://github.com/hamsty/Image2Bin
