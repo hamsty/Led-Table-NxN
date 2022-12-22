@@ -3,6 +3,7 @@
 #include <LedTableNxN.h>
 #include <Arduino.h>
 
+
 LedTableNxN::LedTableNxN(int n, int dataPin, neoPixelType flags) : Adafruit_GFX(n, n)
 {
   this->table = new Adafruit_NeoPixel(n * n, dataPin, flags);
@@ -12,16 +13,19 @@ LedTableNxN::LedTableNxN(int n, int dataPin, neoPixelType flags) : Adafruit_GFX(
   #endif
 }
 
-LedTableNxN::LedTableNxN(int n) : Adafruit_GFX(n,n){
-  
+LedTableNxN::LedTableNxN(int n) : Adafruit_GFX(n, n)
+{
+    this->buffer = (uint32_t *)malloc(n * n * sizeof(uint32_t));
+    for(int i = 0; i < n*n; i++){
+      this->buffer[i] = 0x0;
+    }
 }
+
 
 LedTableNxN::~LedTableNxN(void)
 {
-  if (table)
-  {
-    free(table);
-  }
+  free(table);
+  free(buffer);
 }
 
 void LedTableNxN::drawPixel(int16_t x, int16_t y, uint16_t color)

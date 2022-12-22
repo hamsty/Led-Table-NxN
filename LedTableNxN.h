@@ -1,3 +1,4 @@
+#pragma once
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoPixel.h>
 
@@ -15,7 +16,6 @@ public:
 
 protected:
     LedTableNxN(int n);
-
-private:
     Adafruit_NeoPixel *table;
+    uint32_t *buffer;
 };
