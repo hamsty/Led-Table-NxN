@@ -13,6 +13,9 @@ public:
     void show(void);
     uint32_t getPixel(int n);
 
+protected:
+    LedTableNxN(int n);
+
 private:
     Adafruit_NeoPixel *table;
 };

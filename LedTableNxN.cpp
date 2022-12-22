@@ -5,12 +5,15 @@
 
 LedTableNxN::LedTableNxN(int n, int dataPin, neoPixelType flags) : Adafruit_GFX(n, n)
 {
-  Serial.begin(115200);
   this->table = new Adafruit_NeoPixel(n * n, dataPin, flags);
   this->table->begin();
   #if MESA == 1
   this->table->show();
   #endif
+}
+
+LedTableNxN::LedTableNxN(int n) : Adafruit_GFX(n,n){
+  
 }
 
 LedTableNxN::~LedTableNxN(void)
